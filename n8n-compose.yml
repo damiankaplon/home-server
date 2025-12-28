@@ -1,0 +1,81 @@
+version: '3.8'
+
+volumes:
+  n8n_db_storage:
+  n8n_storage:
+  n8n_redis_storage:
+
+networks:
+  # Internal network for DB/Redis communication
+  n8n_internal_bridge:
+    driver: bridge
+  # Reference the macvlan network you created via CLI
+  macvlan:
+    external: true
+
+x-shared: &shared
+  restart: always
+  image: docker.n8n.io/n8nio/n8n
+  environment:
+    - DB_TYPE=postgresdb
+    - DB_POSTGRESDB_HOST=n8n_postgres
+    - DB_POSTGRESDB_PORT=5432
+    - DB_POSTGRESDB_DATABASE=n8n
+    - DB_POSTGRESDB_USER=poplar3080
+    - DB_POSTGRESDB_PASSWORD=moneywise7123
+    - EXECUTIONS_MODE=queue
+    - QUEUE_BULL_REDIS_HOST=n8n_redis
+    - QUEUE_HEALTH_CHECK_ACTIVE=true
+    - N8N_ENCRYPTION_KEY=Avenue4060
+  volumes:
+    - n8n_storage:/home/node/.n8n
+  networks:
+    - n8n_internal_bridge
+  depends_on:
+    n8n_redis:
+      condition: service_healthy
+    n8n_postgres:
+      condition: service_healthy
+
+services:
+  n8n_postgres:
+    image: postgres:16
+    restart: always
+    environment:
+      - POSTGRES_USER=poplar3080
+      - POSTGRES_PASSWORD=moneywise7123
+      - POSTGRES_DB=n8n
+    volumes:
+      - n8n_db_storage:/var/lib/postgresql/data
+    networks:
+      - n8n_internal_bridge
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -h localhost -U poplar3080 -d n8n']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  n8n_redis:
+    image: redis:6-alpine
+    restart: always
+    volumes:
+      - n8n_redis_storage:/data
+    networks:
+      - n8n_internal_bridge
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  n8n:
+    <<: *shared
+    networks:
+      n8n_internal_bridge:
+      macvlan:
+        ipv4_address: 192.168.0.230
+
+  n8n-worker:
+    <<: *shared
+    command: worker
+
