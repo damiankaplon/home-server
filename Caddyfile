@@ -1,0 +1,23 @@
+# Replace with your domain or local hostname
+# --- Public Domains (Traffic from Cloudflare Tunnel) ---
+
+n8n.damiankaplon.site {
+    reverse_proxy n8n:5678
+    
+    # Use the Cloudflare Origin Cert instead of Caddy's auto-SSL
+    tls /etc/ssl/caddy/origin.pem /etc/ssl/caddy/origin.key
+}
+
+# Add future services here easily:
+# other-service.yourdomain.com {
+#     reverse_proxy other-container-name:port
+# }
+
+
+# --- Local Access (Traffic from your Home Network) ---
+
+192.168.0.230 {
+	reverse_proxy n8n:5678
+	tls internal
+}
+
