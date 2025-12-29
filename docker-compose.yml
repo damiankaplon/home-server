@@ -30,7 +30,7 @@ x-shared: &shared
     - QUEUE_HEALTH_CHECK_ACTIVE=true
     - N8N_ENCRYPTION_KEY=Avenue4060
     - N8N_PROTOCOL=https
-    - WEBHOOK_URL=https://192.168.0.230/
+    - WEBHOOK_URL=https://n8n.damiankaplon.site/
   volumes:
     - n8n_storage:/home/node/.n8n
   networks:
