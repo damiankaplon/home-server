@@ -1,23 +1,22 @@
-# Replace with your domain or local hostname
 # --- Public Domains (Traffic from Cloudflare Tunnel) ---
 
 n8n.damiankaplon.site {
     reverse_proxy n8n:5678
-    
-    # Use the Cloudflare Origin Cert instead of Caddy's auto-SSL
     tls /etc/ssl/caddy/origin.pem /etc/ssl/caddy/origin.key
 }
 
-# Add future services here easily:
-# other-service.yourdomain.com {
-#     reverse_proxy other-container-name:port
-# }
-
+damiankaplon.site {
+    # FIX: Point to the internal port (usually 80 for Nginx containers)
+    reverse_proxy cv-react:80 
+    
+    tls /etc/ssl/caddy/origin.pem /etc/ssl/caddy/origin.key
+}
 
 # --- Local Access (Traffic from your Home Network) ---
 
 192.168.0.230 {
-	reverse_proxy n8n:5678
-	tls internal
+    # If you access the IP, you get the React App
+    reverse_proxy cv-react:80
+    tls internal
 }
 

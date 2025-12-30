@@ -11,6 +11,8 @@ networks:
   # Internal network for DB/Redis communication
   n8n_internal_bridge:
     driver: bridge
+  cv_react_internal_bridge:
+    driver: bridge
   # Reference the macvlan network you created via CLI
   macvlan:
     external: true
@@ -91,6 +93,7 @@ services:
       - ./origin.key:/etc/ssl/caddy/origin.key
     networks:
       n8n_internal_bridge:
+      cv_react_internal_bridge:
       macvlan:
         ipv4_address: 192.168.0.230
     depends_on:
@@ -103,7 +106,14 @@ services:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
     command: tunnel run
     networks:
-      - n8n_internal_bridge 
+      - n8n_internal_bridge
+
+  cv-react:
+    image: cv-react:latest
+    container_name: cv-react
+    restart: always
+    networks:
+      - cv_react_internal_bridge
 
   n8n-worker:
     <<: *shared
