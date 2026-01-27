@@ -6,14 +6,18 @@ volumes:
   n8n_redis_storage:
   caddy_data:
   caddy_config:
+  structify_db_storage:
 
 networks:
-  # Internal network for DB/Redis communication
+  # Internal network for DB/Redis n8n communication
   n8n_internal_bridge:
     driver: bridge
   cv_react_internal_bridge:
     driver: bridge
   # Reference the macvlan network you created via CLI
+  structify_bridge:
+    driver: bridge
+  # Reference the macvlan network created via CLI
   macvlan:
     external: true
 
@@ -118,4 +122,29 @@ services:
   n8n-worker:
     <<: *shared
     command: worker
+
+  structify_postgres:
+    image: postgres:16
+    restart: always
+    environment:
+      - POSTGRES_USER=${STRUCTIFY_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${STRUCTIFY_POSTGRES_PASSWORD}
+      - POSTGRES_DB=${STRUCTIFY_POSTGRES_DB}
+    volumes:
+      - structify_db_storage:/var/lib/postgresql/data
+    networks:
+      - structify_bridge
+
+  structify_keycloak:
+    image: kc:latest
+    container_name: structify-kc
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://structify_postgres/${STRUCTIFY_POSTGRES_DB}
+      KC_DB_USERNAME: ${STRUCTIFY_POSTGRES_USER}
+      KC_DB_PASSWORD: ${STRUCTIFY_POSTGRES_PASSWORD}
+      KEYCLOAK_ADMIN: ${STRUCTIFY_KC_ADMIN_USER}
+      KEYCLOAK_ADMIN_PASSWORD: ${STRUCTIFY_KC_ADMIN_PASSWORD}
+    depends_on:
+      - structify_postgres
 
