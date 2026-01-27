@@ -146,6 +146,7 @@ services:
       KC_HOSTNAME: ${STRUCTIFY_KC_HOSTNAME}
       KEYCLOAK_ADMIN: ${STRUCTIFY_KC_ADMIN_USER}
       KEYCLOAK_ADMIN_PASSWORD: ${STRUCTIFY_KC_ADMIN_PASSWORD}
+    command: start
     networks:
       - structify_bridge
     depends_on:
