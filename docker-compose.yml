@@ -128,9 +128,9 @@ services:
     image: postgres:16
     restart: always
     environment:
+      - POSTGRES_DB=${STRUCTIFY_POSTGRES_DB}
       - POSTGRES_USER=${STRUCTIFY_POSTGRES_USER}
       - POSTGRES_PASSWORD=${STRUCTIFY_POSTGRES_PASSWORD}
-      - POSTGRES_DB=${STRUCTIFY_POSTGRES_DB}
     volumes:
       - structify_db_storage:/var/lib/postgresql/data
     networks:
@@ -140,7 +140,7 @@ services:
     image: kc:latest
     environment:
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://structify_postgres/${STRUCTIFY_POSTGRES_DB}
+      KC_DB_URL: jdbc:postgresql://structify_postgres/keycloak
       KC_DB_USERNAME: ${STRUCTIFY_POSTGRES_USER}
       KC_DB_PASSWORD: ${STRUCTIFY_POSTGRES_PASSWORD}
       KC_HOSTNAME: ${STRUCTIFY_KC_HOSTNAME}
