@@ -98,6 +98,7 @@ services:
     networks:
       n8n_internal_bridge:
       cv_react_internal_bridge:
+      structify_bridge:
       macvlan:
         ipv4_address: 192.168.0.230
     depends_on:
@@ -145,6 +146,8 @@ services:
       KC_HOSTNAME: ${STRUCTIFY_KC_HOSTNAME}
       KEYCLOAK_ADMIN: ${STRUCTIFY_KC_ADMIN_USER}
       KEYCLOAK_ADMIN_PASSWORD: ${STRUCTIFY_KC_ADMIN_PASSWORD}
+    networks:
+      - structify_bridge
     depends_on:
       - structify_postgres
 
