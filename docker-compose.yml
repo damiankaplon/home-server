@@ -156,8 +156,8 @@ services:
     networks:
       - structify_bridge
     volumes:
-      - - ./origin.pem:/opt/keycloak/conf/origin.pem
-      - - ./origin.key:/opt/keycloak/conf/origin.key
+      - ./origin.pem:/opt/keycloak/conf/origin.pem
+      - ./origin.key:/opt/keycloak/conf/origin.key
     depends_on:
       - structify_postgres
 
