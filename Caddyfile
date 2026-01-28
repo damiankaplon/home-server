@@ -13,7 +13,7 @@ damiankaplon.site {
 }
 
 structify.auth.damiankaplon.site {
-    reverse_proxy structify_keycloak:8080
+    reverse_proxy structify_keycloak:8443
 
     tls /etc/ssl/caddy/origin.pem /etc/ssl/caddy/origin.key
 }
