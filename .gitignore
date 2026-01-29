@@ -1,4 +1,6 @@
 .env
 origin.key
 origin.pem
+*.key
+*.pem
 
