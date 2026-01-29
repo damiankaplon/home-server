@@ -15,7 +15,7 @@ damiankaplon.site {
 structify.auth.damiankaplon.site {
     reverse_proxy structify_keycloak:8443
 
-    tls /etc/ssl/caddy/origin.pem /etc/ssl/caddy/origin.key
+    tls /etc/ssl/caddy/auth-app-origin.pem /etc/ssl/caddy/auth-app-origin.key
 }
 
 # --- Local Access (Traffic from your Home Network) ---
