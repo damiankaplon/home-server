@@ -152,14 +152,10 @@ services:
       KC_HOSTNAME: ${STRUCTIFY_KC_HOSTNAME}
       KEYCLOAK_ADMIN: ${STRUCTIFY_KC_ADMIN_USER}
       KEYCLOAK_ADMIN_PASSWORD: ${STRUCTIFY_KC_ADMIN_PASSWORD}
-      KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/conf/origin.pem
-      KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/conf/origin.key
+      KC_HTTP_ENABLED: true
     command: start --optimized
     networks:
       - structify_bridge
-    volumes:
-      - ./auth-app-origin.pem:/opt/keycloak/conf/origin.pem
-      - ./auth-app-origin.key:/opt/keycloak/conf/origin.key
     depends_on:
       - structify_postgres
 
