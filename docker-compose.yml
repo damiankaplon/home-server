@@ -182,7 +182,6 @@ services:
       APP_STRUCTIFY_KC_DB_USER: ${STRUCTIFY_KC_DB_USER}
       APP_STRUCTIFY_KC_DB_PASS: ${STRUCTIFY_KC_DB_PASS}
       APP_STRUCTIFY_KC_DB_SCHEMA: ${STRUCTIFY_KC_DB_SCHEMA}
-    command: sh build/install/infrastructure/bin/infrastructure
     networks:
       - structify_bridge
     depends_on:
