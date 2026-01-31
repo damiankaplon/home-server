@@ -18,6 +18,13 @@ structify-auth.damiankaplon.site {
     tls /etc/ssl/caddy/origin.pem /etc/ssl/caddy/origin.key
 }
 
+
+structify.damiankaplon.site {
+    reverse_proxy structify_app:8080
+
+    tls /etc/ssl/caddy/origin.pem /etc/ssl/caddy/origin.key
+}
+
 # --- Local Access (Traffic from your Home Network) ---
 
 192.168.0.230 {
