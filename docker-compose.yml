@@ -115,7 +115,7 @@ services:
       - n8n_internal_bridge
 
   cv-react:
-    image: cv-react:latest
+    image: cv-react:1.0.0
     container_name: cv-react
     restart: always
     networks:
