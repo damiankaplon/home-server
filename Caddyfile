@@ -6,9 +6,9 @@ n8n.damiankaplon.site {
 }
 
 damiankaplon.site {
-    # FIX: Point to the internal port (usually 80 for Nginx containers)
-    reverse_proxy cv-react:80 
-    
+# FIX: Point to the internal port (usually 80 for Nginx containers)
+    reverse_proxy cv-react:80
+
     tls /etc/ssl/caddy/origin.pem /etc/ssl/caddy/origin.key
 }
 
@@ -26,15 +26,17 @@ structify.damiankaplon.site {
 }
 
 seafile.damiankaplon.site {
-    reverse_proxy seafile:80
-
+    reverse_proxy seafile:80 {
+                                 header_up X-Forwarded-Proto {scheme}
+                                 header_up Host {host}
+                             }
     tls /etc/ssl/caddy/origin.pem /etc/ssl/caddy/origin.key
 }
 
 # --- Local Access (Traffic from your Home Network) ---
 
 192.168.0.230 {
-    # If you access the IP, you get the React App
+# If you access the IP, you get the React App
     reverse_proxy cv-react:80
     tls internal
 }
