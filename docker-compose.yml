@@ -229,6 +229,6 @@ services:
       - FORCE_HTTPS_IN_CONF=true
     depends_on:
       - seafile-db
-      - memcached
+      - seafile-memcached
     networks:
       - seafile-bridge
