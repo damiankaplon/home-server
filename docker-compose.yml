@@ -100,7 +100,7 @@ services:
       - ./origin.key:/etc/ssl/caddy/origin.key
       - ./auth-app-origin.pem:/etc/ssl/caddy/auth-app-origin.pem
       - ./auth-app-origin.key:/etc/ssl/caddy/auth-app-origin.key
-      -
+
     networks:
       n8n_internal_bridge:
       cv_react_internal_bridge:
