@@ -18,7 +18,7 @@ networks:
     driver: bridge
   structify_bridge:
     driver: bridge
-  seafile-bridge:
+  seafile_bridge:
     driver: bridge
   # Reference the macvlan network created via CLI
   macvlan:
@@ -105,7 +105,7 @@ services:
       n8n_internal_bridge:
       cv_react_internal_bridge:
       structify_bridge:
-      seafile-bridge:
+      seafile_bridge:
       macvlan:
         ipv4_address: 192.168.0.230
     depends_on:
@@ -204,14 +204,14 @@ services:
     volumes:
       - seafile_db:/var/lib/mysql
     networks:
-      - seafile-bridge
+      - seafile_bridge
 
   seafile-memcached:
     image: memcached:1.6.18
     container_name: seafile-memcached
     entrypoint: memcached -m 256
     networks:
-      - seafile-bridge
+      - seafile_bridge
   
   seafile:
     image: seafileltd/seafile-mc:10.0-latest
@@ -231,4 +231,4 @@ services:
       - seafile-db
       - seafile-memcached
     networks:
-      - seafile-bridge
+      - seafile_bridge
