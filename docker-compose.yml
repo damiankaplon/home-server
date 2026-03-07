@@ -7,6 +7,8 @@ volumes:
   caddy_data:
   caddy_config:
   structify_db_storage:
+  seafile_db:
+  seafile_data:
 
 networks:
   # Internal network for DB/Redis n8n communication
@@ -15,6 +17,8 @@ networks:
   cv_react_internal_bridge:
     driver: bridge
   structify_bridge:
+    driver: bridge
+  seafile-bridge:
     driver: bridge
   # Reference the macvlan network created via CLI
   macvlan:
@@ -96,6 +100,7 @@ services:
       - ./origin.key:/etc/ssl/caddy/origin.key
       - ./auth-app-origin.pem:/etc/ssl/caddy/auth-app-origin.pem
       - ./auth-app-origin.key:/etc/ssl/caddy/auth-app-origin.key
+      -
     networks:
       n8n_internal_bridge:
       cv_react_internal_bridge:
@@ -188,3 +193,40 @@ services:
     depends_on:
       - structify_postgres
       - structify_keycloak
+  seafile-db:
+    image: mariadb:10.11
+    container_name: seafile-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${SEAFILE_MYSQL_ROOT_PASSWORD}
+      - MYSQL_LOG_CONSOLE=true
+      - MARIADB_AUTO_UPGRADE=1
+    volumes:
+      - seafile_db:/var/lib/mysql
+    networks:
+      - seafile-bridge
+
+  memcached:
+    image: memcached:1.6.18
+    container_name: seafile-memcached
+    entrypoint: memcached -m 256
+    networks:
+      - seafile-bridge
+  
+  seafile:
+    image: seafileltd/seafile-mc:10.0-latest
+    container_name: seafile
+    volumes:
+      - /opt/seafile-data:/shared   # Required, specifies the path to Seafile data persistent store.
+    environment:
+      - DB_HOST=seafile-db
+      - DB_ROOT_PASSWD=${SEAFILE_MYSQL_ROOT_PASSWORD}
+      - TZ="Europe/Warsaw"
+      - SEAFILE_ADMIN_EMAIL=${SEAFILE_ADMIN_EMAIL}
+      - SEAFILE_ADMIN_PASSWORD=${SEAFILE_ADMIN_PASSWORD}
+      - SEAFILE_SERVER_LETSENCRYPT=false
+      - SEAFILE_SERVER_HOSTNAME=seafile.damiankaplon.site
+    depends_on:
+      - db
+      - memcached
+    networks:
+      - seafile-bridge
