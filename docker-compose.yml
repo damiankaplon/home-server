@@ -128,8 +128,6 @@ services:
   structify_postgres:
     image: postgres:16
     restart: always
-    ports:
-      - "5432:5432"
     environment:
       - POSTGRES_DB=${STRUCTIFY_POSTGRES_DB}
       - POSTGRES_USER=${STRUCTIFY_POSTGRES_USER}
