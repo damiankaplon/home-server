@@ -105,6 +105,7 @@ services:
       n8n_internal_bridge:
       cv_react_internal_bridge:
       structify_bridge:
+      seafile-bridge:
       macvlan:
         ipv4_address: 192.168.0.230
     depends_on:
