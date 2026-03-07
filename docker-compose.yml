@@ -226,6 +226,7 @@ services:
       - SEAFILE_ADMIN_PASSWORD=${SEAFILE_ADMIN_PASSWORD}
       - SEAFILE_SERVER_LETSENCRYPT=false
       - SEAFILE_SERVER_HOSTNAME=seafile.damiankaplon.site
+      - FORCE_HTTPS_IN_CONF=true
     depends_on:
       - seafile-db
       - memcached
