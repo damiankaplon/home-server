@@ -226,7 +226,7 @@ services:
       - SEAFILE_SERVER_LETSENCRYPT=false
       - SEAFILE_SERVER_HOSTNAME=seafile.damiankaplon.site
     depends_on:
-      - db
+      - seafile-db
       - memcached
     networks:
       - seafile-bridge
