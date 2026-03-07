@@ -217,7 +217,7 @@ services:
     image: seafileltd/seafile-mc:10.0-latest
     container_name: seafile
     volumes:
-      - /opt/seafile-data:/shared   # Required, specifies the path to Seafile data persistent store.
+      - seafile_data:/shared   # Required, specifies the path to Seafile data persistent store.
     environment:
       - DB_HOST=seafile-db
       - DB_ROOT_PASSWD=${SEAFILE_MYSQL_ROOT_PASSWORD}
