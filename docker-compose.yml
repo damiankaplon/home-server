@@ -258,7 +258,7 @@ services:
       - SEAFILE_LOG_TO_STDOUT=false
       - ENABLE_GO_FILESERVER=true
       - CACHE_PROVIDER=redis
-      - REDIS_HOST=${REDIS_HOST:-redis}
+      - REDIS_HOST=${REDIS_HOST:-seafile-redis}
       - REDIS_PORT=${REDIS_PORT:-6379}
       - REDIS_PASSWORD=${REDIS_PASSWORD:-}
       - ENABLE_NOTIFICATION_SERVER=false
