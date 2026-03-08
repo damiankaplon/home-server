@@ -275,9 +275,9 @@ services:
       retries: 3
       start_period: 10s
     depends_on:
-      db:
+      seafile-mysql:
         condition: service_healthy
-      redis:
+      seafile-redis:
         condition: service_started
     networks:
       - seafile_net
