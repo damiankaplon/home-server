@@ -9,6 +9,8 @@ volumes:
   structify_db_storage:
   seafile_db:
   seafile_data:
+  pihole_data:
+  dnsmasq_data:
 
 networks:
   # Internal network for DB/Redis n8n communication
@@ -63,7 +65,7 @@ services:
     networks:
       - n8n_internal_bridge
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -h localhost -U poplar3080 -d n8n']
+      test: [ 'CMD-SHELL', 'pg_isready -h localhost -U poplar3080 -d n8n' ]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -76,7 +78,7 @@ services:
     networks:
       - n8n_internal_bridge
     healthcheck:
-      test: ['CMD', 'redis-cli', 'ping']
+      test: [ 'CMD', 'redis-cli', 'ping' ]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -267,7 +269,7 @@ services:
       caddy: ${SEAFILE_SERVER_PROTOCOL:-https}://${SEAFILE_SERVER_HOSTNAME:?Variable is not set or empty}
       caddy.reverse_proxy: "{{upstreams 80}}"
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:80 || exit 1"]
+      test: [ "CMD-SHELL", "curl -f http://localhost:80 || exit 1" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -279,3 +281,20 @@ services:
         condition: service_started
     networks:
       - seafile_net
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    restart: always
+    # NET_ADMIN is strictly required for Pi-hole to act as a DHCP server
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - TZ=Europe/Warsaw
+      - WEBPASSWORD=${PIHOLE_WEBPASSWORD}
+    volumes:
+      - pihole_data:/etc/pihole
+      - dnsmasq_data:/etc/dnsmasq.d
+    networks:
+      macvlan:
+        # Assign a free static IP on your LAN. I used .231 assuming Caddy is .230
+        ipv4_address: 192.168.0.231
