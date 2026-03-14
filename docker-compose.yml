@@ -290,7 +290,7 @@ services:
       - NET_ADMIN
     environment:
       - TZ=Europe/Warsaw
-      - WEBPASSWORD=${PIHOLE_WEBPASSWORD}
+      - FTLCONF_webserver_api_password:=${PIHOLE_WEBPASSWORD}
     volumes:
       - pihole_data:/etc/pihole
       - dnsmasq_data:/etc/dnsmasq.d
