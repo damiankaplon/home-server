@@ -26,19 +26,12 @@ structify.damiankaplon.site {
 }
 
 seafile.damiankaplon.site {
+    tls {
+            dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+        }
     reverse_proxy seafile:80 {
                                  header_up X-Forwarded-Proto {scheme}
                                  header_up Host {host}
                                  header_up X-Real-IP {remote}
                              }
-    tls /etc/ssl/caddy/origin.pem /etc/ssl/caddy/origin.key
 }
-
-# --- Local Access (Traffic from your Home Network) ---
-
-192.168.0.230 {
-# If you access the IP, you get the React App
-    reverse_proxy cv-react:80
-    tls internal
-}
-
