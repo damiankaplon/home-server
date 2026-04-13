@@ -171,7 +171,7 @@ services:
       - structify_postgres
 
   structify_app:
-    image: structify:2
+    image: structify:6
     container_name: structify_app
     restart: always
     environment:
