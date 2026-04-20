@@ -296,3 +296,10 @@ services:
       macvlan:
         # Assign a free static IP on your LAN. I used .231 assuming Caddy is .230
         ipv4_address: 192.168.0.231
+
+  qrcodegen:
+    image: ktor-qrcodegen
+    container_name: qrcodegen
+    restart: always
+    networks:
+      - n8n_internal_bridge
