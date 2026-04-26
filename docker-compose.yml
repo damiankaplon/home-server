@@ -303,3 +303,10 @@ services:
     restart: always
     networks:
       - n8n_internal_bridge
+
+  ocr-api:
+    image: receipt-ocr-api
+    container_name: ocr-api
+    restart: always
+    networks:
+      - n8n_internal_bridge
