@@ -11,7 +11,6 @@ n8n.damiankaplon.site {
 }
 
 damiankaplon.site {
-# FIX: Point to the internal port (usually 80 for Nginx containers)
     reverse_proxy cv-react:80
     import cloudflare_tls
 }
@@ -25,15 +24,4 @@ structify-auth.damiankaplon.site {
 structify.damiankaplon.site {
     reverse_proxy structify_app:8080
     import cloudflare_tls
-}
-
-seafile.damiankaplon.site {
-    import cloudflare_tls
-    reverse_proxy seafile:80 {
-                                 header_up X-Forwarded-Proto {scheme}
-                                 header_up Host {host}
-                                 header_up X-Real-IP {remote}
-                                 header_up X-Forwarded-For {remote}
-                                 header_up X-Forwarded-Proto {scheme}
-                             }
 }
