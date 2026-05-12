@@ -1,27 +1,16 @@
-# --- Public Domains (Traffic from Cloudflare Tunnel) ---
-(cloudflare_tls) {
-    tls {
-            dns cloudflare {env.CLOUDFLARE_API_TOKEN}
-        }
-}
-
 n8n.damiankaplon.site {
     reverse_proxy n8n:5678
-    import cloudflare_tls
 }
 
 damiankaplon.site {
     reverse_proxy cv-react:80
-    import cloudflare_tls
 }
 
 structify-auth.damiankaplon.site {
     reverse_proxy structify_keycloak:8080
-    import cloudflare_tls
 }
 
 
 structify.damiankaplon.site {
     reverse_proxy structify_app:8080
-    import cloudflare_tls
 }

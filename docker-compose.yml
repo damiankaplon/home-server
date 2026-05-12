@@ -80,7 +80,7 @@ services:
       - n8n_internal_bridge
 
   caddy:
-    image: my-caddy:latest
+    image: caddy
     restart: always
     ports:
       - "80:80"
