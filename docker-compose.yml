@@ -91,6 +91,8 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
+      - ./origin.pem:/etc/ssl/caddy/origin.pem
+      - ./origin.key:/etc/ssl/caddy/origin.key
 
     networks:
       n8n_internal_bridge:
