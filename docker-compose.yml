@@ -85,8 +85,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    environment:
-      - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
@@ -142,8 +140,8 @@ services:
     environment:
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://structify_postgres/keycloak
-      KC_DB_USERNAME: ${STRUCTIFY_POSTGRES_USER}
-      KC_DB_PASSWORD: ${STRUCTIFY_POSTGRES_PASSWORD}
+      KC_DB_USERNAME: ${KC_DB_USER}
+      KC_DB_PASSWORD: ${KC_DB_PASS}
       KC_PROXY_HEADERS: xforwarded
       KC_HOSTNAME: ${STRUCTIFY_KC_HOSTNAME}
       KC_HOSTNAME_DEBUG: true
