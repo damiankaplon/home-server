@@ -12,7 +12,7 @@ networks:
   # Internal network for DB/Redis n8n communication
   n8n_internal_bridge:
     driver: bridge
-  cv_react_internal_bridge:
+  resume_internal_bridge:
     driver: bridge
   structify_bridge:
     driver: bridge
@@ -94,7 +94,7 @@ services:
 
     networks:
       n8n_internal_bridge:
-      cv_react_internal_bridge:
+      resume_internal_bridge:
       structify_bridge:
     depends_on:
       - n8n
@@ -108,12 +108,12 @@ services:
     networks:
       - n8n_internal_bridge
 
-  cv-react:
-    image: cv-react:1.0.0
-    container_name: cv-react
+  resume:
+    image: resume
+    container_name: resume
     restart: always
     networks:
-      - cv_react_internal_bridge
+      - resume_internal_bridge
 
   n8n-worker:
     <<: *shared

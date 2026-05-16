@@ -4,7 +4,7 @@ n8n.damiankaplon.site {
 }
 
 damiankaplon.site {
-    reverse_proxy cv-react:80
+    reverse_proxy resume:80
     tls /etc/ssl/caddy/origin.pem /etc/ssl/caddy/origin.key
 }
 
