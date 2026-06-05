@@ -16,7 +16,8 @@ networks:
     driver: bridge
   structify_bridge:
     driver: bridge
-
+  szostak_internal_bridge:
+    driver: bridge
 x-shared: &shared
   restart: always
   image: docker.n8n.io/n8nio/n8n
@@ -96,6 +97,7 @@ services:
       n8n_internal_bridge:
       resume_internal_bridge:
       structify_bridge:
+      szostak_internal_bridge:
     depends_on:
       - n8n
   
@@ -192,3 +194,10 @@ services:
     restart: always
     networks:
       - n8n_internal_bridge
+  
+  szostak:
+    image: szostak:latest
+    container_name: szostak
+    restart: always
+    networks:
+      - szostak_internal_bridge

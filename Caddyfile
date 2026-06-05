@@ -18,3 +18,8 @@ structify.damiankaplon.site {
     reverse_proxy structify_app:8080
     tls /etc/ssl/caddy/origin.pem /etc/ssl/caddy/origin.key
 }
+
+sz.damiankaplon.site {
+    reverse_proxy szostak:80
+    tls /etc/ssl/caddy/origin.pem /etc/ssl/caddy/origin.key
+}
