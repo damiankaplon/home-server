@@ -7,6 +7,8 @@ volumes:
   caddy_data:
   caddy_config:
   structify_db_storage:
+  szostak_mongo_storage:
+  szostak_strapi_storage:
 
 networks:
   # Internal network for DB/Redis n8n communication
@@ -201,3 +203,32 @@ services:
     restart: always
     networks:
       - szostak_internal_bridge
+  
+  szostak-strapi:
+    image: strapi/strapi
+    container_name: szostak-strapi
+    environment: 
+      DATABASE_CLIENT: mongo
+      DATABASE_NAME: strapi
+      DATABASE_HOST: mongo
+      DATABASE_PORT: 27017
+      DATABASE_USERNAME: ${MONGO_DB_USERNAME}
+      DATABASE_PASSWORD: ${MONGO_DB_PASSWORD}
+    volumes:
+      - szostak_strapi_storage:/srv/app
+    networks:
+      - szostak_internal_bridge
+    depends_on:
+      - szostak-mongo
+
+  szostak-mongo:
+    image: mongo
+    container_name: szostak-mongo
+    environment:
+      MONGO_INITDB_DATABASE: strapi
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+    networks:
+      - szostak_internal_bridge
+    volumes:
+      - szostak_mongo_storage:/data/db

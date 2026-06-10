@@ -23,3 +23,8 @@ sz.damiankaplon.site {
     reverse_proxy szostak:80
     tls /etc/ssl/caddy/origin.pem /etc/ssl/caddy/origin.key
 }
+
+cms.sz.damiankaplon.site {
+    reverse_proxy szostak-strapi:1337
+    tls /etc/ssl/caddy/origin.pem /etc/ssl/caddy/origin.key
+}
