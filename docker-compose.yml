@@ -205,12 +205,12 @@ services:
       - szostak_internal_bridge
   
   szostak-strapi:
-    image: strapi/strapi
+    image: strapi:latest
     container_name: szostak-strapi
     environment: 
       DATABASE_CLIENT: mongo
       DATABASE_NAME: strapi
-      DATABASE_HOST: mongo
+      DATABASE_HOST: szostak-mongo
       DATABASE_PORT: 27017
       DATABASE_USERNAME: ${MONGO_DB_USERNAME}
       DATABASE_PASSWORD: ${MONGO_DB_PASSWORD}
