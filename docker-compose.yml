@@ -205,7 +205,7 @@ services:
       - szostak_internal_bridge
   
   szostak-strapi:
-    image: strapi:latest
+    image: naskio/strapi
     container_name: szostak-strapi
     environment: 
       DATABASE_CLIENT: mongo
