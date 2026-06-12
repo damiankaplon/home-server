@@ -8,8 +8,7 @@ volumes:
   caddy_config:
   structify_db_storage:
   szostak_mongo_storage:
-  szostak_strapi_storage:
-  strapi-data:
+  strapi_data:
 
 networks:
   # Internal network for DB/Redis n8n communication
@@ -19,9 +18,7 @@ networks:
     driver: bridge
   structify_bridge:
     driver: bridge
-  szostak_internal_bridge:
-    driver: bridge
-  strapi-bridge:
+  strapi_bridge:
     driver: bridge
 x-shared: &shared
   restart: always
@@ -102,7 +99,7 @@ services:
       n8n_internal_bridge:
       resume_internal_bridge:
       structify_bridge:
-      szostak_internal_bridge:
+      strapi_bridge:
     depends_on:
       - n8n
   
@@ -205,24 +202,7 @@ services:
     container_name: szostak
     restart: always
     networks:
-      - szostak_internal_bridge
-  
-  szostak-strapi:
-    image: naskio/strapi
-    container_name: szostak-strapi
-    environment: 
-      DATABASE_CLIENT: mongo
-      DATABASE_NAME: strapi
-      DATABASE_HOST: szostak-mongo
-      DATABASE_PORT: 27017
-      DATABASE_USERNAME: ${MONGO_DB_USERNAME}
-      DATABASE_PASSWORD: ${MONGO_DB_PASSWORD}
-    volumes:
-      - szostak_strapi_storage:/srv/app
-    networks:
-      - szostak_internal_bridge
-    depends_on:
-      - szostak-mongo
+      - strapi_bridge
 
   strapi:
     container_name: strapi
@@ -231,10 +211,8 @@ services:
     env_file: .env
     environment:
       NODE_ENV: production  # Overrides the development value from .env
-    ports:
-      - "0.0.0.0:1337:1337"
     networks:
-      - strapi-bridge
+      - strapi_bridge
     depends_on:
       strapiDB:
         condition: service_healthy
@@ -248,9 +226,9 @@ services:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_DB: ${DATABASE_NAME}
     volumes:
-      - strapi-data:/var/lib/postgresql/data/
+      - strapi_data:/var/lib/postgresql/data/
     networks:
-      - strapi-bridge
+      - strapi_bridge
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USERNAME} -d ${DATABASE_NAME}"]
       interval: 10s
