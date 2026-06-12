@@ -9,6 +9,7 @@ volumes:
   structify_db_storage:
   szostak_mongo_storage:
   szostak_strapi_storage:
+  strapi-data:
 
 networks:
   # Internal network for DB/Redis n8n communication
@@ -19,6 +20,8 @@ networks:
   structify_bridge:
     driver: bridge
   szostak_internal_bridge:
+    driver: bridge
+  strapi-bridge:
     driver: bridge
 x-shared: &shared
   restart: always
