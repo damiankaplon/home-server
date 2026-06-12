@@ -24,7 +24,7 @@ sz.damiankaplon.site {
     tls /etc/ssl/caddy/origin.pem /etc/ssl/caddy/origin.key
 }
 
-cms.sz.damiankaplon.site {
+cms.damiankaplon.site {
     reverse_proxy strapi:1337
     tls /etc/ssl/caddy/origin.pem /etc/ssl/caddy/origin.key
 }
