@@ -226,9 +226,6 @@ services:
 
   strapi:
     container_name: strapi
-    build:
-      context: .
-      dockerfile: Dockerfile
     image: dk_strapi:latest
     restart: always
     env_file: .env
