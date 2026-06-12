@@ -208,7 +208,7 @@ services:
     container_name: strapi
     image: dk_strapi:latest
     restart: always
-    env_file: .env
+    env_file: .strapi-env
     environment:
       NODE_ENV: production  # Overrides the development value from .env
     networks:
