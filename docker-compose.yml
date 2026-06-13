@@ -9,6 +9,7 @@ volumes:
   structify_db_storage:
   szostak_mongo_storage:
   strapi_data:
+  strapi_uploads:
 
 networks:
   # Internal network for DB/Redis n8n communication
@@ -210,7 +211,9 @@ services:
     restart: always
     env_file: .strapi-env
     environment:
-      NODE_ENV: production  # Overrides the development value from .env
+      NODE_ENV: production
+    volumes:
+      - strapi_uploads:/opt/app/public/uploads  # Overrides the development value from .env
     networks:
       - strapi_bridge
     depends_on:
