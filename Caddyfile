@@ -28,3 +28,8 @@ cms.damiankaplon.site {
     reverse_proxy strapi:1337
     tls /etc/ssl/caddy/origin.pem /etc/ssl/caddy/origin.key
 }
+
+webhook-sz.damiankaplon.site {
+    reverse_proxy szostak-builder:9000
+    tls /etc/ssl/caddy/origin.pem /etc/ssl/caddy/origin.key
+}
