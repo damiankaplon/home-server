@@ -10,6 +10,7 @@ volumes:
   szostak_mongo_storage:
   strapi_data:
   strapi_uploads:
+  szostak_dist:
 
 networks:
   # Internal network for DB/Redis n8n communication
@@ -202,8 +203,29 @@ services:
     image: szostak:latest
     container_name: szostak
     restart: always
+    volumes:
+      - szostak_dist:/usr/share/nginx/html:ro
     networks:
       - strapi_bridge
+
+  szostak-builder:
+    image: szostak-builder:latest
+    container_name: szostak-builder
+    restart: always
+    environment:
+      # STRAPI_URL is dual-purpose — where the build fetches content AND the base
+      # for the <img src> URLs baked into the HTML, so it must be reachable by the
+      # visitor's browser (public CMS URL), not the internal strapi:1337.
+      STRAPI_URL: ${STRAPI_URL}
+      STRAPI_API_TOKEN: ${STRAPI_API_TOKEN}
+      WEBHOOK_SECRET: ${WEBHOOK_SECRET}
+    volumes:
+      - szostak_dist:/dist
+    networks:
+      - strapi_bridge
+    depends_on:
+      strapi:
+        condition: service_started
 
   strapi:
     container_name: strapi
