@@ -219,6 +219,7 @@ services:
       STRAPI_URL: ${STRAPI_URL}
       STRAPI_API_TOKEN: ${STRAPI_API_TOKEN}
       WEBHOOK_SECRET: ${WEBHOOK_SECRET}
+      PUBLIC_TURNSTILE_SITE_KEY: ${PUBLIC_TURNSTILE_SITE_KEY}
     volumes:
       - szostak_dist:/dist
     networks:
