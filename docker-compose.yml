@@ -272,9 +272,8 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
-      # Trust Caddy's forwarded headers so pgAdmin builds correct https URLs
+      # Trust Caddy's X-Forwarded-Host / -Proto so pgAdmin builds correct https URLs
       PGADMIN_CONFIG_PROXY_X_HOST_COUNT: 1
-      PGADMIN_CONFIG_PROXY_X_PREFIX_COUNT: 1
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     networks:
