@@ -11,6 +11,7 @@ volumes:
   strapi_data:
   strapi_uploads:
   szostak_dist:
+  pgadmin_data:
 
 networks:
   # Internal network for DB/Redis n8n communication
@@ -263,3 +264,20 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+      # Trust Caddy's forwarded headers so pgAdmin builds correct https URLs
+      PGADMIN_CONFIG_PROXY_X_HOST_COUNT: 1
+      PGADMIN_CONFIG_PROXY_X_PREFIX_COUNT: 1
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - n8n_internal_bridge
+      - structify_bridge
+      - strapi_bridge

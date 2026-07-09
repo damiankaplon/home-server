@@ -33,3 +33,8 @@ webhook-sz.damiankaplon.site {
     reverse_proxy szostak-builder:9000
     tls /etc/ssl/caddy/origin.pem /etc/ssl/caddy/origin.key
 }
+
+pgadmin.damiankaplon.site {
+    reverse_proxy pgadmin:80
+    tls /etc/ssl/caddy/origin.pem /etc/ssl/caddy/origin.key
+}
