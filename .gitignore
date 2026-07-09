@@ -3,4 +3,4 @@ origin.key
 origin.pem
 *.key
 *.pem
-
+.idea/
