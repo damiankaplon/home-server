@@ -51,6 +51,7 @@ x-shared: &shared
 services:
   n8n_postgres:
     image: postgres:16
+    container_name: n8n_postgres
     restart: always
     environment:
       - POSTGRES_USER=${N8N_POSTGRES_USER}
@@ -68,6 +69,7 @@ services:
 
   n8n_redis:
     image: redis:6-alpine
+    container_name: n8n_redis
     restart: always
     volumes:
       - n8n_redis_storage:/data
@@ -124,6 +126,7 @@ services:
   n8n-worker:
     <<: *shared
     command: worker
+    container_name: n8n_worker
 
   structify_postgres:
     image: postgres:16
