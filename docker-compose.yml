@@ -296,7 +296,7 @@ services:
       - ./splitit/db:/docker-entrypoint-initdb.d
     networks: [ splitit_bridge ]
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${SPLITIT_DB_USER} -d splitit" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d splitit" ]
       interval: 5s
       retries: 10
 
