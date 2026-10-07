@@ -308,7 +308,7 @@ services:
       retries: 10
 
   splitit_keycloak:
-    image: kc:latest
+    image: kc-splitit:latest
     container_name: splitit_keycloak
     env_file: .splitit-env
     restart: always
@@ -325,6 +325,16 @@ services:
     networks: [ splitit_bridge ]
     depends_on:
       splitit_postgres: { condition: service_healthy }
+
+  splitit_backend:
+    image: splitit-backend:latest
+    container_name: splitit_backend
+    restart: always
+    env_file: .splitit-env
+    networks: [splitit_bridge]
+    depends_on:
+      splitit_postgres: { condition: service_healthy }
+      splitit_keycloak: { condition: service_started }
 
   splitit_frontend:
     image: splitit-frontend:latest
