@@ -12,6 +12,7 @@ volumes:
   strapi_uploads:
   szostak_dist:
   pgadmin_data:
+  splitit_db_storage:
 
 networks:
   # Internal network for DB/Redis n8n communication
@@ -22,6 +23,8 @@ networks:
   structify_bridge:
     driver: bridge
   strapi_bridge:
+    driver: bridge
+  splitit_bridge:
     driver: bridge
 x-shared: &shared
   restart: always
@@ -105,6 +108,7 @@ services:
       resume_internal_bridge:
       structify_bridge:
       strapi_bridge:
+      splitit_bridge:
     depends_on:
       - n8n
   
@@ -280,3 +284,50 @@ services:
       - n8n_internal_bridge
       - structify_bridge
       - strapi_bridge
+      - splitit_bridge
+
+  splitit_postgres:
+    image: postgres:17
+    container_name: splitit_postgres
+    env_file: .splitit-env
+    restart: always
+    environment:
+      POSTGRES_DB: splitit
+      POSTGRES_USER: ${SPLITIT_DB_USER}
+      POSTGRES_PASSWORD: ${SPLITIT_DB_PASS}
+      KC_DB_USER: ${SPLITIT_KC_DB_USER}
+      KC_DB_PASS: ${SPLITIT_KC_DB_PASS}
+      KC_DB_NAME: keycloak
+    volumes:
+      - splitit_db_storage:/var/lib/postgresql/data
+      - ./splitit/db:/docker-entrypoint-initdb.d
+    networks: [ splitit_bridge ]
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${SPLITIT_DB_USER} -d splitit" ]
+      interval: 5s
+      retries: 10
+
+  splitit_keycloak:
+    image: kc:latest
+    container_name: splitit_keycloak
+    env_file: .splitit-env
+    restart: always
+    command: start --optimized
+    environment:
+      KC_DB_URL: jdbc:postgresql://splitit_postgres/keycloak
+      KC_DB_USERNAME: ${SPLITIT_KC_DB_USER}
+      KC_DB_PASSWORD: ${SPLITIT_KC_DB_PASS}
+      KC_HOSTNAME: https://splitit-auth.damiankaplon.site
+      KC_PROXY_HEADERS: xforwarded
+      KC_HTTP_ENABLED: true
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${SPLITIT_KC_ADMIN_USER}      # KEYCLOAK_ADMIN is deprecated in 26.x
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${SPLITIT_KC_ADMIN_PASSWORD}
+    networks: [ splitit_bridge ]
+    depends_on:
+      splitit_postgres: { condition: service_healthy }
+
+  splitit_frontend:
+    image: splitit-frontend:latest
+    container_name: splitit_frontend
+    restart: always
+    networks: [ splitit_bridge ]
