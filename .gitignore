@@ -1,5 +1,6 @@
 .env
 .strapi-env
+.splitit-env
 origin.key
 origin.pem
 *.key
