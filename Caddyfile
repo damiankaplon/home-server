@@ -38,3 +38,18 @@ pgadmin.damiankaplon.site {
     reverse_proxy pgadmin:80
     tls /etc/ssl/caddy/origin.pem /etc/ssl/caddy/origin.key
 }
+
+splitit.damiankaplon.site {
+    handle_path /api/* {
+        reverse_proxy splitit_backend:8080
+    }
+    handle {
+        reverse_proxy splitit_frontend:80
+    }
+    tls /etc/ssl/caddy/origin.pem /etc/ssl/caddy/origin.key
+}
+
+splitit-auth.damiankaplon.site {
+    reverse_proxy splitit_keycloak:8080
+    tls /etc/ssl/caddy/origin.pem /etc/ssl/caddy/origin.key
+}
