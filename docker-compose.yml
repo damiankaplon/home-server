@@ -306,6 +306,9 @@ services:
     env_file: .splitit-env
     restart: always
     command: start --optimized
+    volumes:
+      # SplitIt! login/registration theme (copied from splitit repo backend/docker/keycloak/themes/splitit)
+      - ./splitit/keycloak/themes/splitit:/opt/keycloak/themes/splitit:ro
     networks: [ splitit_bridge ]
     depends_on:
       splitit_postgres: { condition: service_healthy }
