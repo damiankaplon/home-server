@@ -1,9 +1,6 @@
 version: '3.8'
 
 volumes:
-  n8n_db_storage:
-  n8n_storage:
-  n8n_redis_storage:
   caddy_data:
   caddy_config:
   structify_db_storage:
@@ -15,9 +12,6 @@ volumes:
   splitit_db_storage:
 
 networks:
-  # Internal network for DB/Redis n8n communication
-  n8n_internal_bridge:
-    driver: bridge
   resume_internal_bridge:
     driver: bridge
   structify_bridge:
@@ -26,69 +20,8 @@ networks:
     driver: bridge
   splitit_bridge:
     driver: bridge
-x-shared: &shared
-  restart: always
-  image: docker.n8n.io/n8nio/n8n
-  environment:
-    - DB_TYPE=postgresdb
-    - DB_POSTGRESDB_HOST=n8n_postgres
-    - DB_POSTGRESDB_PORT=5432
-    - DB_POSTGRESDB_DATABASE=${N8N_POSTGRES_DB}
-    - DB_POSTGRESDB_USER=${N8N_POSTGRES_USER}
-    - DB_POSTGRESDB_PASSWORD=${N8N_POSTGRES_PASSWORD}
-    - EXECUTIONS_MODE=queue
-    - QUEUE_BULL_REDIS_HOST=n8n_redis
-    - QUEUE_HEALTH_CHECK_ACTIVE=true
-    - N8N_ENCRYPTION_KEY=Avenue4060
-    - N8N_PROTOCOL=https
-    - WEBHOOK_URL=https://n8n.damiankaplon.site/
-  volumes:
-    - n8n_storage:/home/node/.n8n
-  networks:
-    - n8n_internal_bridge
-  depends_on:
-    n8n_redis:
-      condition: service_healthy
-    n8n_postgres:
-      condition: service_healthy
 
 services:
-  n8n_postgres:
-    image: postgres:16
-    container_name: n8n_postgres
-    restart: always
-    environment:
-      - POSTGRES_USER=${N8N_POSTGRES_USER}
-      - POSTGRES_PASSWORD=${N8N_POSTGRES_PASSWORD}
-      - POSTGRES_DB=${N8N_POSTGRES_DB}
-    volumes:
-      - n8n_db_storage:/var/lib/postgresql/data
-    networks:
-      - n8n_internal_bridge
-    healthcheck:
-      test: [ 'CMD-SHELL', 'pg_isready -h localhost -U poplar3080 -d n8n' ]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-
-  n8n_redis:
-    image: redis:6-alpine
-    container_name: n8n_redis
-    restart: always
-    volumes:
-      - n8n_redis_storage:/data
-    networks:
-      - n8n_internal_bridge
-    healthcheck:
-      test: [ 'CMD', 'redis-cli', 'ping' ]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-
-  n8n:
-    <<: *shared
-    networks:
-      - n8n_internal_bridge
 
   caddy:
     image: caddy
@@ -104,13 +37,10 @@ services:
       - ./origin.key:/etc/ssl/caddy/origin.key
 
     networks:
-      n8n_internal_bridge:
       resume_internal_bridge:
       structify_bridge:
       strapi_bridge:
       splitit_bridge:
-    depends_on:
-      - n8n
   
   cloudflared:
     image: cloudflare/cloudflared:latest
@@ -118,8 +48,6 @@ services:
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
     command: tunnel run
-    networks:
-      - n8n_internal_bridge
 
   resume:
     image: resume
@@ -127,11 +55,6 @@ services:
     restart: always
     networks:
       - resume_internal_bridge
-
-  n8n-worker:
-    <<: *shared
-    command: worker
-    container_name: n8n_worker
 
   structify_postgres:
     image: postgres:16
@@ -197,15 +120,6 @@ services:
     image: ktor-qrcodegen
     container_name: qrcodegen
     restart: always
-    networks:
-      - n8n_internal_bridge
-
-  ocr-api:
-    image: receipt-ocr-api
-    container_name: ocr-api
-    restart: always
-    networks:
-      - n8n_internal_bridge
   
   szostak:
     image: szostak:latest
@@ -281,7 +195,6 @@ services:
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     networks:
-      - n8n_internal_bridge
       - structify_bridge
       - strapi_bridge
       - splitit_bridge
