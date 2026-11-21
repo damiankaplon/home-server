@@ -92,7 +92,7 @@ services:
       - structify_postgres
 
   structify_app:
-    image: structify:7
+    image: structify:8
     container_name: structify_app
     restart: always
     environment:
