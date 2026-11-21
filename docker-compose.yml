@@ -115,11 +115,6 @@ services:
     depends_on:
       - structify_postgres
       - structify_keycloak
-
-  qrcodegen:
-    image: ktor-qrcodegen
-    container_name: qrcodegen
-    restart: always
   
   szostak:
     image: szostak:latest
