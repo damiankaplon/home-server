@@ -11,6 +11,12 @@ volumes:
   pgadmin_data:
   splitit_db_storage:
 
+secrets:
+  # File-based secret: mounted read-only in the container, not visible in `docker inspect`.
+  # Create it on the server: ./secrets/splitit_openai_api_key.txt (key only, git-ignored).
+  splitit_openai_api_key:
+    file: ./secrets/splitit_openai_api_key.txt
+
 networks:
   resume_internal_bridge:
     driver: bridge
@@ -226,6 +232,11 @@ services:
     container_name: splitit_backend
     restart: always
     env_file: .splitit-env
+    secrets:
+      # Mounted as /run/secrets/OPENAI_API_KEY; the image entrypoint refuses to start without it
+      # and Spring reads it as the property OPENAI_API_KEY.
+      - source: splitit_openai_api_key
+        target: OPENAI_API_KEY
     networks: [splitit_bridge]
     depends_on:
       splitit_postgres: { condition: service_healthy }
